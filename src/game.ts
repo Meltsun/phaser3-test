@@ -2,6 +2,8 @@ import * as Phaser from 'phaser';
 
 export default class Demo extends Phaser.Scene
 {
+    playerNum = 6
+    players:Phaser.GameObjects.Image[] = []
     constructor ()
     {
         super('demo');
@@ -9,38 +11,28 @@ export default class Demo extends Phaser.Scene
 
     preload ()
     {
-        this.load.image('logo', 'assets/phaser3-logo.png');
-        this.load.image('libs', 'assets/libs.png');
-        this.load.glsl('bundle', 'assets/plasma-bundle.glsl.js');
-        this.load.glsl('stars', 'assets/starfields.glsl.js');
+        this.load.image('老金', 'assets/character/老金.jpg')
     }
 
     create ()
     {
-        this.add.shader('RGB Shift Field', 0, 0, 800, 600).setOrigin(0);
-
-        this.add.shader('Plasma', 0, 412, 800, 172).setOrigin(0);
-
-        this.add.image(400, 300, 'libs');
-
-        const logo = this.add.image(400, 70, 'logo');
-
-        this.tweens.add({
-            targets: logo,
-            y: 350,
-            duration: 1500,
-            ease: 'Sine.inOut',
-            yoyo: true,
-            repeat: -1
-        })
+        let interval = 40
+        let playerWidth = (config.width-(this.playerNum-1)*interval)/this.playerNum
+        console.log(playerWidth)
+        for(let i=0;i<this.playerNum;i++){
+            this.players[i]=this.add.image(0, 0, '老金')
+            this.players[i].setCrop(0,0,this.players[i].width,this.players[i].height-750)
+            this.players[i].setScale(playerWidth/this.players[i].width)
+            this.players[i].setPosition(playerWidth*(i+0.5)+interval*i,this.players[i].displayHeight/2)
+        }
     }
 }
 
 const config = {
     type: Phaser.AUTO,
     backgroundColor: '#125555',
-    width: 800,
-    height: 600,
+    width: 1760,
+    height: 880,
     scene: Demo
 };
 
