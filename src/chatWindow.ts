@@ -19,15 +19,18 @@ export class ChatWindow {
     constructor(scene: Phaser.Scene) {
         this.scene = scene;
         this.messages = [];
-
+        
         const textMaskGraphics = this.scene.make.graphics();
         textMaskGraphics.fillStyle(0xffffff);
         textMaskGraphics.fillRect(this.x-this.width/2,this.y-this.fullHeight/2,this.width,this.fullHeight-this.height)
         const textMask=textMaskGraphics.createGeometryMask()
         textMask.invertAlpha=true
-        
-        const chatWindow = this;
 
+        const maskContainer = this.scene.add.container()
+        maskContainer.setMask(textMask)
+
+        const chatWindow = this;
+        
         let textGroup = scene.add.group(
             {
                 classType:
@@ -39,7 +42,7 @@ export class ChatWindow {
                                 wordWrap: { width: chatWindow.width - 20 ,useAdvancedWrap:true}
                             })
                             this.setOrigin(0, 1);
-                            this.setMask(textMask)
+                            maskContainer.add(this)
                         }
                         addText(y:number,text:string):number{
                             this.setText(text)
@@ -60,25 +63,17 @@ export class ChatWindow {
         this.textGroup = textGroup
 
         const rectangle = scene.add.rectangle(this.x, this.y, this.width, this.fullHeight, 0x000000);
-        rectangle.setMask(textMask)
+        maskContainer.add(rectangle)
         rectangle.setInteractive()
         rectangle.on('pointerout',
             function (){
-                rectangle.setMask(textMask)
-                textGroup.getChildren().forEach((value)=>{
-                    let textObject = value as chatMessageTextObject
-                    textObject.setMask(textMask)
-                })
+                maskContainer.setMask(textMask)
             }
         )
 
         rectangle.on('pointerover',
             function (){
-                rectangle.clearMask()
-                textGroup.getChildren().forEach((value)=>{
-                    let textObject = value as chatMessageTextObject
-                    textObject.clearMask()
-                })
+                maskContainer.clearMask()
             }
         )
     }
@@ -93,7 +88,7 @@ export class ChatWindow {
             let startY=this.y+this.fullHeight/2-10
             for(let i=0;startY>=this.y-this.fullHeight/2+10 && i<this.messages.length;i++){
                 let textObject = this.textGroup.get() as chatMessageTextObject
-                startY=textObject.addText(startY,message)-10
+                startY=textObject.addText(startY,this.messages[i])-10
             }
         }
     }

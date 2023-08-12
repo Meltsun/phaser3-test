@@ -39,11 +39,8 @@ export default class Demo extends Phaser.Scene
         this.chatWindow.addMessage('好汉：这是一条示例消息5。');
         this.chatWindow.addMessage('好汉：这是一条示例消息6。');
         this.chatWindow.addMessage('好汉：这是一条示例消息7。');
-        this.chatWindow.addMessage('好汉：这是一条很长很长很长很长很长很长很长很长很长很长很长示例消息。');
         this.chatWindow.addMessage('好汉：这是一条示例消息8。');
         this.chatWindow.addMessage('好汉：这是一条示例消息9。');
-        this.chatWindow.addMessage('好汉：这是一条很长很长很长很长很长很长很长很长很长很长很长示例消息。');
-        
     }
 
     update(time: number, delta: number): void {
