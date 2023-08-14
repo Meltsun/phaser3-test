@@ -42,7 +42,6 @@ export class ChatWindow {
                                 wordWrap: { width: chatWindow.width - 20 ,useAdvancedWrap:true}
                             })
                             this.setOrigin(0, 1);
-                            maskContainer.add(this)
                         }
                         addText(y:number,text:string):number{
                             this.setText(text)
@@ -56,8 +55,14 @@ export class ChatWindow {
                             this.setActive(false);
                             this.setVisible(false);
                         }
+
+                        
                     },
                 maxSize : this.maxLines,
+                createCallback:((item)=>{
+                    maskContainer.add(item)
+                })
+
             })
 
         this.textGroup = textGroup
